@@ -1,0 +1,16 @@
+.header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	border-bottom: 4px solid #289DB9 ;
+}
+.header img{
+	width: 20%;
+}
+@media screen and (max-width:400px) {
+	.header img{
+		width: 40%;
+	}
+	
+}
