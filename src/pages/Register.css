@@ -3,10 +3,15 @@
 	justify-content: center;
 	align-items: center;
 }
+button{
+	font-size: 18px;
+}
 h1{
 	font-size: 36px;
 	padding: 20px;
 	color: #289DB9;
+	text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
+
 }
 .content-register{
 	margin-top: 40px;
@@ -36,6 +41,8 @@ h1{
 .content-register>*{
 	padding: 10px;
 	border-radius: 7px;
+	box-shadow: 10px 14px 12px rgba(0, 0, 0, 0.1);
+
 }
 .new-user a{
 	cursor: pointer;
