@@ -1,5 +1,5 @@
 import express from "express";
-import { PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommand, PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbDocClient } from "../data/dynamodb.js";
 import type { Response,Request } from "express";
 import { createUserSchema } from "../validering/userValidate.js";
@@ -83,4 +83,32 @@ router.post("/", async (req: Request<{}, {}, CreateUserBody>, res: Response <{ m
     res.status(500).json({ error: "Could not create user" });
   }
 });
+
+// DELETE /users/:id
+router.delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Missing user ID" });
+    }
+
+    const params = {
+      TableName: "chappy",
+      Key: {
+        pk: `USER#${id}`,
+        sk: "PROFILE",
+      },
+    };
+
+    await ddbDocClient.send(new DeleteCommand(params));
+
+    res.status(200).json({ message: `User with id ${id} deleted successfully.` });
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    res.status(500).json({ error: "Could not delete user" });
+  }
+});
+
+
 export default router;
