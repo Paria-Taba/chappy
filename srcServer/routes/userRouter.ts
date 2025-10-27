@@ -59,7 +59,7 @@ router.post("/", async (req: Request<{}, {}, CreateUserBody>, res: Response <{ m
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Create PK/SK
-    const pk = `USER#${userName}`;
+    const pk = `USER# ${userName}`;
     const sk = "PROFILE";
     const createdAt = new Date().toISOString();
 
