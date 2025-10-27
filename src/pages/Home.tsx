@@ -15,7 +15,7 @@ function Home(){
 		
 		<input type="text" placeholder="Password:" />
 		<button className="LogIn-button">Log in</button>
-		<NavLink className="new-user" to={""}>New user? Create account</NavLink>
+		<NavLink className="new-user" to={"/register"}>New user? Create account</NavLink>
 			<button className="guest">Continue as a guest</button>
 		</div>
 		</div>
