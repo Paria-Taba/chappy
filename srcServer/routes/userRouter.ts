@@ -8,9 +8,17 @@ import bcrypt from "bcrypt"
 const router = express.Router();
 router.use(express.json()); 
  
+interface User {
+  pk: string;
+  sk: string;
+  userName: string;
+  email: string;
+  passwordHash: string;
+  createdAt: string;
+}
 
 //GET /users
-router.get("/", async (req:Request, res:Response) => {
+router.get("/", async (req:Request, res:Response<User[] | { error: string }>) => {
   try {
 
 const params = {
@@ -21,7 +29,9 @@ const params = {
 
 
     const data = await ddbDocClient.send(new ScanCommand(params));
-    res.json(data.Items);
+	 // Hantera om Items är undefined
+    const items = (data.Items ?? []) as User[];
+    res.json(items);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Could not find users" });
@@ -29,7 +39,13 @@ const params = {
 });
 
 //POST /users
-router.post("/", async (req: Request, res: Response) => {
+interface CreateUserBody {
+  userName: string;
+  email: string;
+  password: string;
+}
+
+router.post("/", async (req: Request<{}, {}, CreateUserBody>, res: Response <{ message: string; user: User } | { message?: string; error?: string }>) => {
   try {
 
 	const parsed = createUserSchema.safeParse(req.body);
@@ -43,7 +59,7 @@ router.post("/", async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Create PK/SK
-    const pk = `USER#${Date.now()}`;
+    const pk = `USER#${userName}`;
     const sk = "PROFILE";
     const createdAt = new Date().toISOString();
 
