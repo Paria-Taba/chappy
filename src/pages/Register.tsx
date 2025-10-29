@@ -12,7 +12,6 @@ function Register(){
 		<div className="content-register">
 		
 		<input type="text" placeholder="UserName:" />
-		<input type="text" placeholder="Email:" />
 		<input type="text" placeholder="Password:" />
 
 		<button className="register-button">Register</button>
