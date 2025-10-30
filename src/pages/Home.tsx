@@ -7,7 +7,7 @@ function Home() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  // State for UI feedback
+ 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -39,8 +39,8 @@ function Home() {
 	  console.log("token", data.token)
       setSuccess(true);
 
-      // Optional redirect after short delay
-      setTimeout(() => navigate("/channels"), 1000);
+      
+      setTimeout(() => navigate("/channel"), 1000);
     } catch (err) {
       console.error(err);
       setLoading(false);
