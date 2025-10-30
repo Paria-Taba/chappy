@@ -12,7 +12,6 @@ interface User {
   pk: string;
   sk: string;
   userName: string;
-  email: string;
   passwordHash: string;
   createdAt: string;
 }
@@ -41,7 +40,6 @@ const params = {
 //POST /users
 interface CreateUserBody {
   userName: string;
-  email: string;
   password: string;
 }
 
@@ -53,7 +51,7 @@ router.post("/", async (req: Request<{}, {}, CreateUserBody>, res: Response <{ m
       return res.status(400).json({ message:"User validate has problem"});
     }
 
-    const { userName, email, password } = parsed.data;
+    const { userName, password } = parsed.data;
 
     // Hash the password
     const passwordHash = await bcrypt.hash(password, 10);
@@ -69,7 +67,6 @@ router.post("/", async (req: Request<{}, {}, CreateUserBody>, res: Response <{ m
         pk,
         sk,
         userName,
-        email,
         passwordHash,
         createdAt
       }
@@ -77,7 +74,7 @@ router.post("/", async (req: Request<{}, {}, CreateUserBody>, res: Response <{ m
 
     await ddbDocClient.send(new PutCommand(params));
 
-    res.status(201).json({ message: "User created", user: { pk,sk, userName, email,passwordHash,createdAt } });
+    res.status(201).json({ message: "User created", user: { pk,sk, userName,passwordHash,createdAt } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Could not create user" });

@@ -2,6 +2,8 @@ import Header from "../components/Header"
 import "./Home.css"
 import { NavLink } from "react-router"
 function Home(){
+	
+
 	return(
 		<div>
 		<Header></Header>
