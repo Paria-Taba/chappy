@@ -73,3 +73,20 @@ h1{
 	
 }
 }
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  color: #2ecc71;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.LogIn-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

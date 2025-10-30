@@ -4,6 +4,7 @@ import { ddbDocClient } from "../data/dynamodb.js";
 import type { Response,Request } from "express";
 import { createUserSchema } from "../validering/userValidate.js";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 router.use(express.json()); 
@@ -106,6 +107,50 @@ router.delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
     res.status(500).json({ error: "Could not delete user" });
   }
 });
+
+
+// POST /login
+router.post("/login", async (req, res) => {
+  const { userName, password } = req.body;
+
+  if (!userName || !password) {
+    return res.status(400).json({ error: "Username and password required" });
+  }
+
+  try {
+    // Find user in DynamoDB
+    const params = {
+      TableName: "chappy",
+      FilterExpression: "pk = :pk",
+      ExpressionAttributeValues: { ":pk": `USER# ${userName}` }
+    };
+    const data = await ddbDocClient.send(new ScanCommand(params));
+    const user = data.Items?.[0];
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Compare password
+    const match = await bcrypt.compare(password, user.passwordHash);
+    if (!match) {
+      return res.status(401).json({ error: "Incorrect password" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userName: user.userName },
+      process.env.JWT_SECRET || "secretkey",
+      { expiresIn: "1h" }
+    );
+
+    res.json({ message: "Login successful", token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Login failed" });
+  }
+});
+
 
 
 export default router;
