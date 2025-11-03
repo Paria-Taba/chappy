@@ -1,8 +1,9 @@
 import express from "express";
-import { PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommand, GetCommand, PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbDocClient } from "../data/dynamodb.js";
 import type { Response,Request } from "express";
 import { createChannelSchema } from "../validering/channelValidate.js";
+import { verifyToken } from "../auth/auth.js";
 
 
 const router = express.Router();
@@ -18,7 +19,7 @@ interface Channel {
 }
 
 // GET /channels
-router.get("/", async (req: Request, res: Response<Channel[] | { error: string }>) => {
+router.get("/",verifyToken, async (req: Request, res: Response<Channel[] | { error: string }>) => {
   try {
     const params = {
       TableName: "chappy",
@@ -47,7 +48,7 @@ interface CreateChannelBody {
 }
 
 router.post(
-  "/",
+  "/",verifyToken,
   async (req: Request<{}, {}, unknown>, res: Response<{ message: string; channel?: any } | { error: string }>) => {
     try {
       // Validate request body with Zod
@@ -84,4 +85,27 @@ router.post(
     }
   }
 );
+
+// DELETE /channels
+router.delete("/:id", verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const loggedInUser = (req as any).user.userName;
+
+  try {
+    const channelData = await ddbDocClient.send(
+      new GetCommand({ TableName: "chappy", Key: { pk: id, sk: "METADATA" } })
+    );
+    if (!channelData.Item) return res.status(404).json({ error: "Channel not found" });
+    if (channelData.Item.createdBy !== loggedInUser)
+      return res.status(403).json({ error: "You can only delete your own channel" });
+
+    await ddbDocClient.send(new DeleteCommand({ TableName: "chappy", Key: { pk: id, sk: "METADATA" } }));
+
+    res.json({ message: "Channel deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete channel" });
+  }
+});
+
 export default router

@@ -25,6 +25,8 @@ function ChannelPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string>("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [newChannelName, setNewChannelName] = useState("");
+const [isLocked, setIsLocked] = useState(false);
 
   const navigate = useNavigate();
   const currentUser = localStorage.getItem("userName") || "";
@@ -33,7 +35,11 @@ function ChannelPage() {
   useEffect(() => {
     const fetchChannels = async () => {
       try {
-        const res = await fetch("http://localhost:4000/channels");
+       const res = await fetch("http://localhost:4000/channels", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
         const data = await res.json();
         setChannels(data);
       } catch (err) {
@@ -88,6 +94,38 @@ function ChannelPage() {
       setError(err.message || "Failed to delete account");
     }
   };
+  const createChannel = async () => {
+  if (!newChannelName) {
+    setError("Channel name is required");
+    return;
+  }
+  if (!token || !currentUser) {
+    setError("You must be logged in");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:4000/channels", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name: newChannelName, isLocked, createdBy: currentUser }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to create channel");
+
+    setChannels([...channels, data.channel]); // اضافه کردن کانال جدید به لیست
+    setNewChannelName("");
+    setIsLocked(false);
+    setError("");
+  } catch (err: any) {
+    console.error(err);
+    setError(err.message || "Failed to create channel");
+  }
+};
 
   return (
     <div>
@@ -138,6 +176,29 @@ function ChannelPage() {
             )}
           </div>
         </div>
+<div className="create-channel">
+  <h1>Create New Channel</h1>
+  <div>
+	 <label htmlFor="channel" className="channel-name">Channel Name:</label>
+  <input className="input"
+    type="text"
+    value={newChannelName}
+    onChange={(e) => setNewChannelName(e.target.value)}
+  />
+  </div>
+ <div className="div-checkbox">
+	<label id="checkbox">Locked</label>
+    <input
+      type="checkbox"
+      checked={isLocked}
+      onChange={(e) => setIsLocked(e.target.checked)}
+    />
+ </div>
+  
+
+ 
+  <button onClick={createChannel}>Create Channel</button>
+</div>
 
         <div className="button-div">
           {!confirmDelete ? (
@@ -150,7 +211,7 @@ function ChannelPage() {
             </div>
           )}
         </div>
-
+		
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
     </div>
