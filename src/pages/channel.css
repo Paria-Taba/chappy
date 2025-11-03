@@ -1,0 +1,20 @@
+.chat-page{
+	background-color: #3F4E65;
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.chat-page>*{
+	margin: 30px;
+}
+.channel,.DM{
+	display: flex;
+	border-radius: 10px;
+	background-color: #C3F1FC;
+	width: 50%;
+}
+h1{
+	border-bottom: 1px solid black;
+	color: black;
+}

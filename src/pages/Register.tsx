@@ -1,30 +1,29 @@
+import  { useState } from "react";
+import { useNavigate, NavLink } from "react-router";
 import Header from "../components/Header";
-import { NavLink } from "react-router";
 import "./Register.css";
-import { useState } from "react";
 
 function Register() {
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
 
-  interface User {
-    userName: string;
-    password: string;
-  }
+  const navigate = useNavigate();
 
   async function registerUser() {
     setSuccessMessage("");
     setErrorMessage("");
 
-    const newUser: User = {
-      userName,
-      password,
-    };
+    if (!username || !password) {
+      setErrorMessage("Username and password are required.");
+      return;
+    }
+
+    const newUser = { username, password };
 
     try {
-      const res = await fetch("http://localhost:4000/users", {
+      const res = await fetch("http://localhost:4000/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
@@ -33,13 +32,19 @@ function Register() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMessage(data.error || "Registration failed");
+        setErrorMessage(data.error || "Registration failed.");
         return;
       }
 
-      console.log(data);
-      setSuccessMessage("Registration successful! You can now log in."); 
+      setSuccessMessage("Registration successful! Redirecting to login...");
+    
+      setUsername("");
       setPassword("");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+
     } catch (err) {
       console.error(err);
       setErrorMessage("Something went wrong. Try again.");
@@ -52,16 +57,18 @@ function Register() {
       <div className="title-register">
         <h1>Register here!</h1>
       </div>
+
       <div className="content-register">
         <input
           type="text"
-          placeholder="UserName:"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
+
         <input
           type="password"
-          placeholder="Password:"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -70,13 +77,13 @@ function Register() {
           Register
         </button>
 
-       
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <NavLink className="new-user" to={"/"}>
           Already a member? Log in
         </NavLink>
+        
         <button className="guest">Continue as a guest</button>
       </div>
     </div>
