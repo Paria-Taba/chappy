@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import "../pages/channel.css";
-import people from "../assets/images/people.jpg"
+import people from "../assets/images/people.jpg";
 
 interface Channel {
   pk: string;
@@ -24,6 +24,10 @@ function ChannelPage() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string>("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const navigate = useNavigate();
+  const currentUser = localStorage.getItem("userName") || "";
 
   useEffect(() => {
     const fetchChannels = async () => {
@@ -52,6 +56,37 @@ function ChannelPage() {
     fetchUsers();
   }, []);
 
+  const deleteAccount = async () => {
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token || !currentUser) throw new Error("Not authenticated");
+
+      const res = await fetch(`http://localhost:4000/users/${currentUser}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete account");
+
+      // Clear localStorage and redirect
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
+      navigate("/login");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Failed to delete account");
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -66,12 +101,8 @@ function ChannelPage() {
               <ul className="ul-channel">
                 {channels.map((channel) => (
                   <li key={channel.pk}>
-                    <NavLink
-                      to={`/channels/${channel.pk}`} // navigate to channel page
-                      className="channel-link"
-                    >
-                      <strong>{channel.name}</strong>{" "}
-                      {channel.isLocked ? "(Locked)" : "(Public)"}
+                    <NavLink to={`/channels/${channel.pk}`} className="channel-link">
+                      <strong>{channel.name}</strong> {channel.isLocked ? "(Locked)" : "(Public)"}
                       <br />
                       <small>Created by: {channel.createdBy}</small>
                     </NavLink>
@@ -92,26 +123,36 @@ function ChannelPage() {
               <ul className="ul-dm">
                 {users.map((user) => (
                   <li key={user.pk}>
-					<div className="dm-div">
-						<div className="image-div">	
-							<img src={people} alt="DM-icon" /></div>
-					
-						 <NavLink
-                      to={`/dm/${user.pk}`} // navigate to direct message page
-                      className="dm-link"
-                    >
-                      {user.userName}
-                    </NavLink>
-					</div>
-                   
+                    <div className="dm-div">
+                      <div className="image-div">
+                        <img src={people} alt="DM-icon" />
+                      </div>
+                      <NavLink to={`/dm/${user.pk}`} className="dm-link">
+                        {user.userName}
+                      </NavLink>
+                    </div>
                   </li>
                 ))}
               </ul>
             )}
           </div>
         </div>
+
+        {/* Delete Account Section */}
+        <div className="button-div">
+          {!confirmDelete ? (
+            <button onClick={() => setConfirmDelete(true)}>Delete my account</button>
+          ) : (
+            <div className="confirm-delete">
+              <p>Are you sure you want to delete your account?</p>
+              <button onClick={deleteAccount}>Yes, delete</button>
+              <button onClick={() => setConfirmDelete(false)}>Cancel</button>
+            </div>
+          )}
+        </div>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }

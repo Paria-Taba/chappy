@@ -69,3 +69,20 @@ a:hover{
 	justify-content: center;
 	align-items: center;
 }
+.button-div button{
+	color: white;
+	border-radius: 10px;
+padding: 20px;
+font-size: 25px;
+background-color: #289DB9;
+
+}
+.confirm-delete{
+	font-size: 25px;
+	color: white;
+	display: flex;
+	flex-direction: column;
+}
+.confirm-delete>*{
+	margin: 10px;
+}
