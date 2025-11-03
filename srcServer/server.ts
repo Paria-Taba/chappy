@@ -2,7 +2,10 @@ import express from "express"
 import cors from "cors"
 const app=express()
 import userRouter from "./routes/userRouter.js"
+import channelRouter from "./routes/channelRouter.js"
 const port: number = Number(process.env.PORT) || 4000
+
+
 app.use(cors({
   origin: "http://localhost:5173", 
   methods: ["GET", "POST", "DELETE", "PUT"],
@@ -10,6 +13,7 @@ app.use(cors({
 }));
 
 app.use("/users",userRouter)
+app.use("/channels",channelRouter)
 
 app.use(express.static('./dist/'))
 
