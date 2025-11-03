@@ -28,6 +28,7 @@ function ChannelPage() {
 
   const navigate = useNavigate();
   const currentUser = localStorage.getItem("userName") || "";
+  const token = localStorage.getItem("token") || "";
 
   useEffect(() => {
     const fetchChannels = async () => {
@@ -62,10 +63,12 @@ function ChannelPage() {
       return;
     }
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token || !currentUser) throw new Error("Not authenticated");
+    if (!token || !currentUser) {
+      setError("Not authenticated");
+      return;
+    }
 
+    try {
       const res = await fetch(`http://localhost:4000/users/${currentUser}`, {
         method: "DELETE",
         headers: {
@@ -77,10 +80,9 @@ function ChannelPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to delete account");
 
-      // Clear localStorage and redirect
       localStorage.removeItem("token");
       localStorage.removeItem("userName");
-      navigate("/login");
+      navigate("/");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Failed to delete account");
@@ -91,7 +93,6 @@ function ChannelPage() {
     <div>
       <Header />
       <div className="chat-page">
-        {/* Channels Section */}
         <div className="channel">
           <h1>CHANNELS</h1>
           <div className="channel-content">
@@ -102,7 +103,8 @@ function ChannelPage() {
                 {channels.map((channel) => (
                   <li key={channel.pk}>
                     <NavLink to={`/channels/${channel.pk}`} className="channel-link">
-                      <strong>{channel.name}</strong> {channel.isLocked ? "(Locked)" : "(Public)"}
+                      <strong>{channel.name}</strong>{" "}
+                      {channel.isLocked ? "(Locked)" : "(Public)"}
                       <br />
                       <small>Created by: {channel.createdBy}</small>
                     </NavLink>
@@ -113,7 +115,6 @@ function ChannelPage() {
           </div>
         </div>
 
-        {/* Direct Messages Section */}
         <div className="DM">
           <h1>DIRECT MESSAGES</h1>
           <div className="dm-content">
@@ -138,7 +139,6 @@ function ChannelPage() {
           </div>
         </div>
 
-        {/* Delete Account Section */}
         <div className="button-div">
           {!confirmDelete ? (
             <button onClick={() => setConfirmDelete(true)}>Delete my account</button>

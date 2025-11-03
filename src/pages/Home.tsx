@@ -1,13 +1,11 @@
 import Header from "../components/Header";
 import "./Home.css";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function Home() {
+function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-
- 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -34,12 +32,11 @@ function Home() {
         return;
       }
 
-      // Save token
+      // Store token and username
       localStorage.setItem("token", data.token);
-	  console.log("token", data.token)
-      setSuccess(true);
+      localStorage.setItem("userName", userName);
 
-      
+      setSuccess(true);
       setTimeout(() => navigate("/channel"), 1000);
     } catch (err) {
       console.error(err);
@@ -68,19 +65,12 @@ function Home() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
-        <button
-          className="LogIn-button"
-          onClick={loginUser}
-          disabled={loading}
-        >
+        <button className="LogIn-button" onClick={loginUser} disabled={loading}>
           {loading ? "Logging in..." : "Log in"}
         </button>
 
-	{error && <p className="error-message">{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">Login successful!</p>}
-
-        
 
         <NavLink className="new-user" to={"/register"}>
           New user? Create account
@@ -91,4 +81,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Login;
