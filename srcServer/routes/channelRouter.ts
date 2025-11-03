@@ -2,10 +2,12 @@ import express from "express";
 import { PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbDocClient } from "../data/dynamodb.js";
 import type { Response,Request } from "express";
+import { createChannelSchema } from "../validering/channelValidate.js";
 
 
 const router = express.Router();
 router.use(express.json()); 
+
 interface Channel {
   pk: string;
   sk: string; 
@@ -44,37 +46,42 @@ interface CreateChannelBody {
   createdBy: string;
 }
 
-router.post("/", async (req: Request<{}, {}, CreateChannelBody>, res: Response<{ message: string; channel?: any } | { error: string }>) => {
-  try {
-    const { name, isLocked, createdBy } = req.body;
+router.post(
+  "/",
+  async (req: Request<{}, {}, unknown>, res: Response<{ message: string; channel?: any } | { error: string }>) => {
+    try {
+      // Validate request body with Zod
+      const parsed = createChannelSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({message:"Is not valid"});
+      }
 
-    if (!name || !createdBy) {
-      return res.status(400).json({ error: "Name and createdBy are required." });
+      const { name, isLocked, createdBy } = parsed.data;
+
+      const createdAt = new Date().toISOString();
+
+      // Generate a unique channel ID
+      const channelId = `CHANNEL#${Date.now()}`;
+
+      const params = {
+        TableName: "chappy",
+        Item: {
+          pk: channelId,
+          sk: "METADATA",
+          name,
+          isLocked,
+          createdBy,
+          createdAt,
+        },
+      };
+
+      await ddbDocClient.send(new PutCommand(params));
+
+      res.status(201).json({ message: "Channel created successfully", channel: params.Item });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Could not create channel" });
     }
-
-    const createdAt = new Date().toISOString();
-
-    // Generate a unique channel ID
-    const channelId = `CHANNEL#${Date.now()}`; // simple unique ID based on timestamp
-
-    const params = {
-      TableName: "chappy",
-      Item: {
-        pk: channelId,
-        sk: "METADATA",
-        name,
-        isLocked,
-        createdBy,
-        createdAt,
-      },
-    };
-
-    await ddbDocClient.send(new PutCommand(params));
-
-    res.status(201).json({ message: "Channel created successfully", channel: params.Item });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Could not create channel" });
   }
-});
+);
 export default router
