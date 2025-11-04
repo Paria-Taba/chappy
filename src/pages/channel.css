@@ -177,3 +177,29 @@ cursor: pointer;
 .home-button a:hover{
 	background-color: #00323e
 }
+
+@media screen and (max-width:600px) {
+	.chat-page{
+		padding: 0;
+	}
+	.channel-content{
+		padding: 0;
+	}
+	h1{
+		font-size: 26px;
+	}
+	.dm-content{padding: 0;}
+	.ul-dm>*{
+	padding: 10px;
+}
+
+}
+@media screen and (max-width:400px){
+	.chat-page{
+		align-items: start;
+	}
+	h1{
+		font-size: 20px;
+	}
+
+}
