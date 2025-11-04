@@ -87,19 +87,34 @@ router.post(
 );
 
 // DELETE /channels
-router.delete("/:id", verifyToken, async (req, res) => {
-  const { id } = req.params;
+
+router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+  const { id } = req.params; // must match channel.pk exactly
   const loggedInUser = (req as any).user.userName;
 
-  try {
-    const channelData = await ddbDocClient.send(
-      new GetCommand({ TableName: "chappy", Key: { pk: id, sk: "METADATA" } })
-    );
-    if (!channelData.Item) return res.status(404).json({ error: "Channel not found" });
-    if (channelData.Item.createdBy !== loggedInUser)
-      return res.status(403).json({ error: "You can only delete your own channel" });
+  if (!id) return res.status(400).json({ error: "Channel ID is required" });
 
-    await ddbDocClient.send(new DeleteCommand({ TableName: "chappy", Key: { pk: id, sk: "METADATA" } }));
+  try {
+    // Fetch the channel to check creator
+    const paramsGet = {
+      TableName: "chappy",
+      Key: { pk: id, sk: "METADATA" },
+    };
+    const channelData = await ddbDocClient.send(new GetCommand(paramsGet));
+    const channel = channelData.Item;
+
+    if (!channel) return res.status(404).json({ error: "Channel not found" });
+
+    if (channel.createdBy !== loggedInUser) {
+      return res.status(403).json({ error: "You can only delete your own channel" });
+    }
+
+    // Delete channel
+    const paramsDelete = {
+      TableName: "chappy",
+      Key: { pk: id, sk: "METADATA" },
+    };
+    await ddbDocClient.send(new DeleteCommand(paramsDelete));
 
     res.json({ message: "Channel deleted successfully" });
   } catch (err) {
@@ -108,4 +123,4 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 
-export default router
+export default router;
