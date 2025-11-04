@@ -52,6 +52,9 @@ box-shadow: 10px 14px 12px rgba(0, 0, 0, 0.1);
 .LogIn-button{
 	background-color: #3F5965;
 }
+.LogIn-button:hover{
+	    background-color: #084f61;
+}
 .guest{
 	display: flex;
 	align-items: center;
@@ -78,7 +81,7 @@ h1{
 }
 
 .error-message {
-  color: #e74c3c;
+  color: #872116;
   margin-top: 10px;
   text-align: center;
 }
@@ -91,5 +94,5 @@ h1{
 
 .LogIn-button:disabled {
   opacity: 0.6;
-  cursor: not-allowed;
+
 }

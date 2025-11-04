@@ -153,6 +153,11 @@ function ChannelPage() {
   }
 };
 
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userName");
+  navigate("/"); // redirect to login page
+};
 	return (
 		<div>
 		<Header />
@@ -256,6 +261,9 @@ function ChannelPage() {
 			<button onClick={() => setConfirmDelete(false)}>Cancel</button>
 			</div>
 		)}
+		</div>
+		<div className="button-div">
+			<button onClick={handleLogout}>Log out</button>
 		</div>
 		
 		{error && <p style={{ color: "red" }}>{error}</p>}

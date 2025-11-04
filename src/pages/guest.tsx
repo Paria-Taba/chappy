@@ -23,10 +23,11 @@ function GuestPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string>("");
 
+ // public endpoint
   useEffect(() => {
     const fetchPublicChannels = async () => {
       try {
-        const res = await fetch("http://localhost:4000/channels/public"); // public endpoint
+        const res = await fetch("http://localhost:4000/channels/public");
         const data = await res.json();
         setChannels(data);
       } catch (err) {
@@ -37,7 +38,7 @@ function GuestPage() {
 
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:4000/users/public"); // public endpoint
+        const res = await fetch("http://localhost:4000/users/public"); 
         const data = await res.json();
         setUsers(data);
       } catch (err) {

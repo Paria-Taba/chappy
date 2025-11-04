@@ -75,7 +75,11 @@ a:hover{
 padding: 20px;
 font-size: 25px;
 background-color: #289DB9;
+cursor: pointer;
 
+}
+.button-div button:hover{
+	background-color: #00323e
 }
 .confirm-delete{
 	font-size: 25px;
