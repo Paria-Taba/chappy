@@ -33,6 +33,7 @@ function ChannelPage() {
 	const token = localStorage.getItem("token") || "";
 	
 	useEffect(() => {
+		  console.log("Current token:", token); 
 		const fetchChannels = async () => {
 			try {
 				const res = await fetch("http://localhost:4000/channels", {
