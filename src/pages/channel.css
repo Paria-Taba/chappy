@@ -192,6 +192,14 @@ cursor: pointer;
 	.ul-dm>*{
 	padding: 10px;
 }
+.confirm-delete-channel {
+	padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+ 
+}
+
 
 }
 @media screen and (max-width:400px){
