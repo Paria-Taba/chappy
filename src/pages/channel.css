@@ -162,3 +162,14 @@ gap: 10px;
   background: red;
   color: white;
 }
+.home-button a{
+background-color: #289DB9;
+color: white;
+padding: 20px;
+font-size: 25px;
+border-radius: 10px;
+cursor: pointer;
+}
+.home-button a:hover{
+	background-color: #00323e
+}

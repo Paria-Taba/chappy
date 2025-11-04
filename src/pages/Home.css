@@ -53,9 +53,12 @@ box-shadow: 10px 14px 12px rgba(0, 0, 0, 0.1);
 	background-color: #3F5965;
 }
 .guest{
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color: #289DB9;
 	margin-bottom: 80px;
-
+	color: white;
 }
 @media screen and (max-width:400px) {
 h1{

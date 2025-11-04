@@ -123,4 +123,29 @@ router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+
+// GET /channels/public
+router.get("/public", async (req: Request, res: Response<Channel[] | { error: string }>) => {
+  try {
+    const params = {
+      TableName: "chappy",
+      FilterExpression: "begins_with(pk, :prefix) AND sk = :sk",
+      ExpressionAttributeValues: {
+        ":prefix": "CHANNEL#",
+        ":sk": "METADATA",
+      },
+    };
+
+    const data = await ddbDocClient.send(new ScanCommand(params));
+    const channels = (data.Items ?? []) as Channel[];
+
+    // Optional: filter out locked channels
+    const publicChannels = channels.filter((ch) => !ch.isLocked);
+
+    res.json(publicChannels);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not find channels" });
+  }
+});
 export default router;

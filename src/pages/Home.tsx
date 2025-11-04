@@ -75,7 +75,7 @@ function Login() {
         <NavLink className="new-user" to={"/register"}>
           New user? Create account
         </NavLink>
-        <button className="guest">Continue as a guest</button>
+        <NavLink to={"/guest"} className="guest">Continue as a guest</NavLink>
       </div>
     </div>
   );

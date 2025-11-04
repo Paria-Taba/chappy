@@ -97,4 +97,24 @@ router.post("/login", async (req, res) => {
   res.json({ message: "Login successful", token });
 });
 
+
+// GET /users/public
+router.get("/public", async (req, res) => {
+  try {
+    const params = {
+      TableName: "chappy",
+      FilterExpression: "begins_with(pk, :prefix)",
+      ExpressionAttributeValues: { ":prefix": "USER#" },
+    };
+    const data = await ddbDocClient.send(new ScanCommand(params));
+
+    // Optional: remove sensitive fields
+    const users = (data.Items ?? []).map((u) => ({ userName: u.userName, pk: u.pk }));
+
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not fetch users" });
+  }
+});
 export default router;
