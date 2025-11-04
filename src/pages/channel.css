@@ -211,3 +211,11 @@ cursor: pointer;
 	}
 
 }
+.dm-link:hover{
+	color: red;
+	cursor: pointer;
+}
+.ul-channel li:hover{
+	color: red;
+	cursor: pointer;
+}

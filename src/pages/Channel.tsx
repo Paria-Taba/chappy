@@ -173,7 +173,7 @@ const handleLogout = () => {
 				<li key={channel.pk}>
 				<NavLink to={`/channels/${channel.pk}`} className="channel-link">
 				<strong>{channel.name}</strong>{" "}
-				{channel.isLocked ? "(Locked)" : "(Public)"}
+				{channel.isLocked ? "🔒" : "🌐"}
 				<br />
 				<small>Created by: {channel.createdBy}</small>
 				</NavLink>

@@ -66,7 +66,7 @@ function GuestPage() {
                 {channels.map((channel) => (
                   <li key={channel.pk}>
                     <strong>{channel.name}</strong>{" "}
-                    {channel.isLocked ? "(Locked)" : "(Public)"}
+                    {channel.isLocked ? "(Locked)" : "🌐"}
                     <br />
                     <small>Created by: {channel.createdBy}</small>
                   </li>
