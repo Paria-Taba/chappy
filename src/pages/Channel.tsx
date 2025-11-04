@@ -130,25 +130,28 @@ function ChannelPage() {
 	
 	
 	 const handleConfirmDelete = async (channelId: string) => {
-    if (!token || !currentUser) return setError("Not authenticated");
+  if (!token || !currentUser) return setError("Not authenticated");
 
-    try {
-      const res = await fetch(`http://localhost:4000/channels/${channelId}`, {
+  try {
+    const res = await fetch(
+      `http://localhost:4000/channels/${encodeURIComponent(channelId)}`,
+      {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
-      });
+      }
+    );
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to delete channel");
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to delete channel");
 
-      // Remove deleted channel from state
-      setChannels(channels.filter((ch) => ch.pk !== channelId));
-      setChannelToDelete(null); // reset confirmation
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Failed to delete channel");
-    }
-  };
+    setChannels(channels.filter((ch) => ch.pk !== channelId));
+    setChannelToDelete(null);
+  } catch (err: any) {
+    console.error(err);
+    setError(err.message || "Failed to delete channel");
+  }
+};
+
 	return (
 		<div>
 		<Header />
