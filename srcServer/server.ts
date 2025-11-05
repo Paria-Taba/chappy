@@ -3,6 +3,7 @@ import cors from "cors"
 const app=express()
 import userRouter from "./routes/userRouter.js"
 import channelRouter from "./routes/channelRouter.js"
+import messageRouter from "./routes/messageRouter.js"
 const port: number = Number(process.env.PORT) || 4000
 
 
@@ -14,6 +15,8 @@ app.use(cors({
 
 app.use("/users",userRouter)
 app.use("/channels",channelRouter)
+app.use("/dm", messageRouter);
+
 
 app.use(express.static('./dist/'))
 

@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Channel from "./pages/Channel";
 import GuestPage from "./pages/guest";
+import DMPage from "./pages/dmPage";
+
 
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
 				<Route path="/register" element={<Register></Register>}></Route>
 				<Route path="/channel" element={<Channel></Channel>}></Route>
 				<Route path="/guest" element={<GuestPage></GuestPage>}></Route>
+				  <Route path="/dm/:userId" element={<DMPage />} />
+        
 
 			</Routes>
 		</HashRouter>
