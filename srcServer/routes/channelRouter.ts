@@ -152,4 +152,50 @@ router.post("/:id/messages", verifyToken, async (req, res) => {
   }
 });
 
+// GET all public channels
+router.get("/public", async (req, res) => {
+  try {
+    const params = {
+      TableName: "chappy",
+      FilterExpression: "begins_with(pk, :prefix) AND sk = :sk AND isLocked = :isLocked",
+      ExpressionAttributeValues: {
+        ":prefix": "CHANNEL#",
+        ":sk": "METADATA",
+        ":isLocked": false, // only unlocked/public channels
+      },
+    };
+
+    const data = await ddbDocClient.send(new ScanCommand(params));
+    const channels = (data.Items ?? []) as Channel[];
+    res.json(channels);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not fetch public channels" });
+  }
+});
+
+// GET messages of a public channel
+router.get("/public/:id/messages", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const params = {
+      TableName: "chappy",
+      KeyConditionExpression: "pk = :pk AND begins_with(sk, :prefix)",
+      ExpressionAttributeValues: {
+        ":pk": id,
+        ":prefix": "MESSAGE#",
+      },
+      ScanIndexForward: true,
+    };
+
+    const data = await ddbDocClient.send(new QueryCommand(params));
+    const messages = (data.Items ?? []) as ChannelMessage[];
+    res.json(messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not fetch public messages" });
+  }
+});
+
+
 export default router;

@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import "../pages/channel.css";
 import people from "../assets/images/people.jpg";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 
 interface Channel {
   pk: string;
-  sk: string;
   name: string;
-  isLocked: boolean;
   createdBy: string;
-  createdAt: string;
+  isLocked: boolean;
 }
 
 interface User {
@@ -22,8 +20,8 @@ function GuestPage() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string>("");
-
- // public endpoint
+  const [dmMessage, setDmMessage] = useState<string>(""); 
+  
   useEffect(() => {
     const fetchPublicChannels = async () => {
       try {
@@ -51,13 +49,18 @@ function GuestPage() {
     fetchUsers();
   }, []);
 
+  const handleUserClick = (userName: string) => {
+    // Show message instead of opening DM
+    setDmMessage(`You cannot open private messages with ${userName} as a guest.`);
+  };
+
   return (
     <div>
       <Header />
-
       <div className="chat-page">
+
         <div className="channel">
-          <h1>CHANNELS</h1>
+          <h1>PUBLIC CHANNELS</h1>
           <div className="channel-content">
             {channels.length === 0 ? (
               <p>No channels available</p>
@@ -65,10 +68,14 @@ function GuestPage() {
               <ul className="ul-channel">
                 {channels.map((channel) => (
                   <li key={channel.pk}>
-                    <strong>{channel.name}</strong>{" "}
-                    {channel.isLocked ? "(Locked)" : "🌐"}
-                    <br />
-                    <small>Created by: {channel.createdBy}</small>
+                    <NavLink
+                      to={`/guest/channels/${encodeURIComponent(channel.pk)}`}
+                      className="channel-link"
+                    >
+                      <strong>{channel.name}</strong> {channel.isLocked ? "(Locked)" : "🌐"}
+                      <br />
+                      <small>Created by: {channel.createdBy}</small>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
@@ -77,7 +84,7 @@ function GuestPage() {
         </div>
 
         <div className="DM">
-          <h1>DIRECT MESSAGES</h1>
+          <h1>USERS</h1>
           <div className="dm-content">
             {users.length === 0 ? (
               <p>No users found</p>
@@ -85,7 +92,11 @@ function GuestPage() {
               <ul className="ul-dm">
                 {users.map((user) => (
                   <li key={user.pk}>
-                    <div className="dm-div">
+                    <div
+                      className="dm-div"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleUserClick(user.userName)}
+                    >
                       <div className="image-div">
                         <img src={people} alt="DM-icon" />
                       </div>
@@ -96,11 +107,14 @@ function GuestPage() {
               </ul>
             )}
           </div>
+          {/* Display guest DM warning message */}
+          {dmMessage && <p className="error-guest-dm">{dmMessage}</p>}
         </div>
-		<div className="home-button">
-			<NavLink to={"/"} >Home</NavLink>
-		</div>
-		
+
+        <div className="home-button">
+          <NavLink to={"/"}>Home</NavLink>
+        </div>
+
       </div>
 
       {error && <p style={{ color: "red" }}>{error}</p>}

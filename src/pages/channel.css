@@ -169,6 +169,9 @@ gap: 10px;
   background: red;
   color: white;
 }
+.home-button{
+	padding-top: 20px;
+}
 .home-button a{
 background-color: #289DB9;
 color: white;
@@ -221,4 +224,10 @@ cursor: pointer;
 .ul-channel li:hover{
 	color: red;
 	cursor: pointer;
+}
+.error-guest-dm{
+	padding: 15px;
+	color: red;
+	font-size: 20px;
+
 }

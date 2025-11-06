@@ -6,6 +6,7 @@ import Channel from "./pages/Channel";
 import GuestPage from "./pages/guest";
 import DMPage from "./pages/dmPage";
 import ChannelChat from "./pages/channelChat";
+import GuestChannelChat from "./pages/GuestChannelChat";
 
 
 
@@ -20,6 +21,7 @@ function App() {
 				<Route path="/guest" element={<GuestPage></GuestPage>}></Route>
 				<Route path="/dm/:userName" element={<DMPage />} />
 				<Route path="/channels/:channelId" element={<ChannelChat />} />
+				<Route path="/guest/channels/:channelId" element={<GuestChannelChat />} />
 
         
 
