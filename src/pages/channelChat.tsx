@@ -125,8 +125,8 @@ function ChannelChat() {
           <button onClick={sendMessage}>Send</button>
         </div>
 
-        <div style={{ marginTop: "10px" }}>
-          <NavLink to="/channels">Back to Channels</NavLink>
+        <div className="button-div">
+         <button><NavLink to="/channel">Back to Channels</NavLink></button> 
         </div>
       </div>
     </div>

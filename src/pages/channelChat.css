@@ -57,3 +57,16 @@
 .channel-input-container button:hover {
   background-color: #45a049;
 }
+.button-div button{
+	margin-top: 20px;
+	color: white;
+	border-radius: 10px;
+padding: 20px;
+font-size: 20px;
+background-color: #289DB9;
+cursor: pointer;
+
+}
+.button-div button:hover{
+	background-color: #00323e
+}
