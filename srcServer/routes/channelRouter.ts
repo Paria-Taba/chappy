@@ -128,7 +128,7 @@ router.get("/:id/messages", verifyToken, async (req: Request, res: Response<Chan
 });
 
 // POST a message to a channel
-router.post("/:id/messages", verifyToken, async (req: Request, res: Response<{ message: string; msg?: ChannelMessage } | { error: string }>) => {
+router.post("/:id/messages", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { content } = req.body;
   const senderId = (req as any).user.userName;
@@ -141,7 +141,7 @@ router.post("/:id/messages", verifyToken, async (req: Request, res: Response<{ m
 
     const params = {
       TableName: "chappy",
-      Item: { pk: id, sk, senderId, content, timestamp },
+      Item: { pk: id, sk, senderId, content, timestamp }, // pk = unique channelId
     };
 
     await ddbDocClient.send(new PutCommand(params));

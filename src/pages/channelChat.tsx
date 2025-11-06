@@ -11,7 +11,6 @@ interface ChannelMessage {
 
 interface ChannelMeta {
   pk: string;
-  sk: string;
   name: string;
   createdBy: string;
   isLocked: boolean;
@@ -23,46 +22,40 @@ function ChannelChat() {
   const decodedChannelId = decodeURIComponent(channelId || "");
   const [messages, setMessages] = useState<ChannelMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [channelName, setChannelName] = useState<string>(""); // Store channel name
+  const [channelName, setChannelName] = useState("");
   const token = localStorage.getItem("token");
   const currentUser = localStorage.getItem("userName");
 
-  // Fetch channel metadata once
+  // Fetch channel name
   useEffect(() => {
-    const fetchChannelName = async () => {
+    const fetchChannel = async () => {
       if (!decodedChannelId || !token) return;
       try {
-        // Fetch all channels (you can optimize later to fetch a single channel)
         const res = await fetch("http://localhost:4000/channels", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data: ChannelMeta[] = await res.json();
         const channel = data.find((c) => c.pk === decodedChannelId);
-        if (channel) setChannelName(channel.name); // Set channel name
+        if (channel) setChannelName(channel.name);
       } catch (err) {
-        console.error("Could not fetch channel metadata", err);
+        console.error(err);
       }
     };
-    fetchChannelName();
+    fetchChannel();
   }, [decodedChannelId, token]);
 
-  // Fetch messages every 2 seconds
+  // Fetch messages
   useEffect(() => {
     const fetchMessages = async () => {
       if (!decodedChannelId || !token) return;
       try {
         const res = await fetch(
-          `http://localhost:4000/channels/${decodedChannelId}/messages`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          `http://localhost:4000/channels/${encodeURIComponent(decodedChannelId)}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         const data: ChannelMessage[] = await res.json();
         setMessages(
-          data.sort(
-            (a, b) =>
-              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-          )
+          data.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
         );
       } catch (err) {
         console.error("Could not fetch messages", err);
@@ -79,13 +72,10 @@ function ChannelChat() {
 
     try {
       await fetch(
-        `http://localhost:4000/channels/${decodedChannelId}/messages`,
+        `http://localhost:4000/channels/${encodeURIComponent(decodedChannelId)}/messages`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify({ content: newMessage }),
         }
       );
@@ -103,10 +93,7 @@ function ChannelChat() {
 
         <div className="channel-messages">
           {messages.map((msg, i) => (
-            <p
-              key={i}
-              className={msg.senderId === currentUser ? "self" : "other"}
-            >
+            <p key={i} className={msg.senderId === currentUser ? "self" : "other"}>
               <strong>{msg.senderId}</strong>: {msg.content}
             </p>
           ))}
@@ -118,15 +105,15 @@ function ChannelChat() {
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") sendMessage();
-            }}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
           <button onClick={sendMessage}>Send</button>
         </div>
 
         <div className="button-div">
-         <button><NavLink to="/channel">Back to Channels</NavLink></button> 
+          <button>
+            <NavLink to="/channel">Back to Channels</NavLink>
+          </button>
         </div>
       </div>
     </div>
