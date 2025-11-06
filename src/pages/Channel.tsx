@@ -161,7 +161,9 @@ const handleLogout = () => {
 	return (
 		<div>
 		<Header />
+		
 		<div className="chat-page">
+		<h3 className="title-name">Hi {currentUser}👋</h3>
 		<div className="channel">
 		<h1>CHANNELS</h1>
 		<div className="channel-content">

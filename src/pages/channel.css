@@ -5,13 +5,16 @@
 	flex-direction: column;
 	align-items: center;
 }
+.title-name{
+	color: white;
+}
 .channel{
 	display: flex;
 	flex-direction: column;
 
 }
 .chat-page>*{
-	margin: 30px;
+	margin: 10px;
 }
 .channel,.DM, .create-channel{
 	display: flex;
