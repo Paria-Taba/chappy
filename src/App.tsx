@@ -17,7 +17,8 @@ function App() {
 				<Route path="/register" element={<Register></Register>}></Route>
 				<Route path="/channel" element={<Channel></Channel>}></Route>
 				<Route path="/guest" element={<GuestPage></GuestPage>}></Route>
-				  <Route path="/dm/:userId" element={<DMPage />} />
+				<Route path="/dm/:userName" element={<DMPage />} />
+
         
 
 			</Routes>

@@ -13,8 +13,8 @@ interface DMMessage {
 }
 
 function DMPage() {
-  const { userId } = useParams();
-  const decodedUserId = decodeURIComponent(userId || ""); // decode username
+  const { userName } = useParams(); // now URL will contain the username
+  const decodedUserName = decodeURIComponent(userName || "");
   const [messages, setMessages] = useState<DMMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const token = localStorage.getItem("token");
@@ -25,17 +25,16 @@ function DMPage() {
     fetchMessages();
     const interval = setInterval(fetchMessages, 2000);
     return () => clearInterval(interval);
-  }, [decodedUserId]);
+  }, [decodedUserName]);
 
   const fetchMessages = async () => {
-    if (!currentUser || !decodedUserId) return;
+    if (!currentUser || !decodedUserName) return;
     try {
       const res = await fetch(
-        `http://localhost:4000/dm/${currentUser}/${decodedUserId}`,
+        `http://localhost:4000/dm/${currentUser}/${decodedUserName}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data: DMMessage[] = await res.json();
-      // Sort messages by timestamp
       setMessages(
         data.sort(
           (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
@@ -47,7 +46,7 @@ function DMPage() {
   };
 
   const sendMessage = async () => {
-    if (!newMessage || !currentUser || !decodedUserId) return;
+    if (!newMessage || !currentUser || !decodedUserName) return;
     try {
       await fetch(`http://localhost:4000/dm`, {
         method: "POST",
@@ -57,12 +56,12 @@ function DMPage() {
         },
         body: JSON.stringify({
           senderId: currentUser,
-          receiverId: decodedUserId,
+          receiverId: decodedUserName,
           content: newMessage,
         }),
       });
       setNewMessage("");
-      fetchMessages(); // refresh after sending
+      fetchMessages();
     } catch (err) {
       console.error("Could not send DM", err);
     }
@@ -72,8 +71,8 @@ function DMPage() {
     <div>
       <Header />
       <div className="div-user">
-        <img src={people} alt="user-idon" />
-        <h1>Chat with {decodedUserId}</h1>
+        <img src={people} alt="user" />
+        <h1>Chat with {decodedUserName}</h1>
       </div>
 
       <div className="dm-container">

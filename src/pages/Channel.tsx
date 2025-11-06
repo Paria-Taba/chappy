@@ -217,9 +217,9 @@ const handleLogout = () => {
 				<div className="image-div">
 				<img src={people} alt="DM-icon" />
 				</div>
-				<NavLink to={`/dm/${user.pk}`} className="dm-link">
-				{user.userName}
-				</NavLink>
+				  <NavLink to={`/dm/${encodeURIComponent(user.userName)}`} className="dm-link">
+                {user.userName}
+              </NavLink>
 				</div>
 				</li>
 			))}
