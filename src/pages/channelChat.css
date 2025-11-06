@@ -1,0 +1,59 @@
+.channel-chat-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.channel-messages {
+	display: flex;
+	flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 400px;
+  overflow-y: scroll;
+  background: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+.self {
+  text-align: right;
+  background: #dcf8c6;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 3px 0;
+  display: inline-block;
+}
+
+.other {
+  text-align: left;
+  background: #f1f0f0;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 3px 0;
+  display: inline-block;
+}
+
+.channel-input-container {
+  display: flex;
+  gap: 5px;
+}
+
+.channel-input-container input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.channel-input-container button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.channel-input-container button:hover {
+  background-color: #45a049;
+}
