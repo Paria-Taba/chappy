@@ -59,7 +59,7 @@ function GuestPage() {
       <Header />
       <div className="chat-page">
 
-        <div className="channel">
+        <div className="channel DM">
           <h1>PUBLIC CHANNELS</h1>
           <div className="channel-content">
             {channels.length === 0 ? (

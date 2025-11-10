@@ -185,9 +185,12 @@ cursor: pointer;
 }
 
 @media screen and (max-width:600px) {
-	.chat-page{
-		padding: 0;
+	 .DM, .create-channel {
+		width: 90%;
 	}
+	 .create-channel {
+    padding: 0;
+	 }
 	.channel-content{
 		padding: 0;
 	}

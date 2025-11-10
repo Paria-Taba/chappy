@@ -118,7 +118,7 @@ function ChannelPage() {
       <div className="chat-page">
         <h3 className="title-name">Hi {currentUser}👋</h3>
 
-        <div className="channel">
+        <div className="channel DM">
           <h1>CHANNELS</h1>
           <div className="channel-content">
             {channels.length === 0 ? (
