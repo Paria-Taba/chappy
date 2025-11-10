@@ -52,9 +52,7 @@ a{
 	color: black;
 	
 }
-a:hover{
-	color:red
-}
+
 .dm-div {
   display: flex;
   align-items: center;
@@ -76,6 +74,7 @@ a:hover{
 .button-div{
 	display: flex;
 	flex-direction: column;
+
 }
 .button-div button{
 	color: white;

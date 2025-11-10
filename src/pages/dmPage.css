@@ -70,9 +70,11 @@ padding: 10px;
 }
 
 .dm-send-btn:hover {
-  background-color: #0b5ed7;
+  background-color: #084f61;
+
 }
 .button-div{
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -87,12 +89,7 @@ background-color: #289DB9;
 cursor: pointer;
 
 }
-.button-div button a:hover{
-	background-color: #00323e;
-	color: white;
-	
 
-}
 
 .div-user{
 	padding-top: 20px;

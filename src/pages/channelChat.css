@@ -24,14 +24,14 @@
 }
 
 .message.self {
-  background-color: #d1ffd1;
+  background-color: #d1e7dd;
   align-self: flex-end;
   text-align: right;
   margin-left: auto;
 }
 
 .message.other {
-  background-color: #e1e1e1;
+  background-color:#f8d7da;
   align-self: flex-start;
   text-align: left;
 }
@@ -63,26 +63,25 @@
   cursor: pointer;
 }
 
-.channel-input-container button:hover {
-  background-color: #005fcc;
-}
 
 .button-div {
   margin-top: 30px;
+  color: white;
 }
 
 
 .button-div button{
 	color: white;
 	border-radius: 10px;
-padding: 20px;
 font-size: 25px;
+border: none;
 background-color: #289DB9;
 cursor: pointer;
 
 }
 .button-div button:hover{
-	background-color: #00323e
+	 background-color: #084f61;
+	 color:white
 }
 @media screen and (max-width:400px) {
 	.channel-input-container{
