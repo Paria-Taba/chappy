@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams, NavLink } from "react-router-dom";
 import "./dmPage.css";
 import Header from "../components/Header";
-import people from "../assets/images/people.jpg";
 
 interface DMMessage {
   senderId: string;
@@ -71,7 +70,6 @@ function DMPage() {
     <div>
       <Header />
       <div className="div-user">
-        <img src={people} alt="user" />
         <h1>Chat with {decodedUserName}</h1>
       </div>
 
