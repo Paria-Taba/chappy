@@ -27,7 +27,7 @@ function GuestChannelChat() {
   useEffect(() => {
     const fetchChannelMeta = async () => {
       try {
-        const res = await fetch("http://localhost:4000/channels/public");
+        const res = await fetch("/api/channels/public");
         const channels: Channel[] = await res.json();
         const channel = channels.find((c) => c.pk === decodedChannelId);
         if (channel) setChannelName(channel.name);
@@ -44,7 +44,7 @@ function GuestChannelChat() {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/channels/public/${encodeURIComponent(decodedChannelId)}/messages`
+          `/api/channels/public/${encodeURIComponent(decodedChannelId)}/messages`
         );
         const data: ChannelMessage[] = await res.json();
         setMessages(
@@ -66,7 +66,7 @@ function GuestChannelChat() {
 
     try {
       await fetch(
-        `http://localhost:4000/channels/public/${encodeURIComponent(decodedChannelId)}/messages`,
+        `/api/channels/public/${encodeURIComponent(decodedChannelId)}/messages`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

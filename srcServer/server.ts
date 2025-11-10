@@ -13,9 +13,9 @@ app.use(cors({
   credentials: true
 }));
 
-app.use("/users",userRouter)
-app.use("/channels",channelRouter)
-app.use("/dm", messageRouter);
+app.use("/api/users",userRouter)
+app.use("/api/channels",channelRouter)
+app.use("/api/dm", messageRouter);
 
 
 app.use(express.static('./dist/'))

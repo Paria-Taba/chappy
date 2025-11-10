@@ -25,7 +25,7 @@ function GuestPage() {
   useEffect(() => {
     const fetchPublicChannels = async () => {
       try {
-        const res = await fetch("http://localhost:4000/channels/public");
+        const res = await fetch("/api/channels/public");
         const data = await res.json();
         setChannels(data);
       } catch (err) {
@@ -36,7 +36,7 @@ function GuestPage() {
 
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:4000/users/public"); 
+        const res = await fetch("/api/users/public"); 
         const data = await res.json();
         setUsers(data);
       } catch (err) {

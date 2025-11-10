@@ -12,7 +12,7 @@ interface DMMessage {
 }
 
 function DMPage() {
-  const { userName } = useParams(); // now URL will contain the username
+  const { userName } = useParams();
   const decodedUserName = decodeURIComponent(userName || "");
   const [messages, setMessages] = useState<DMMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -30,7 +30,7 @@ function DMPage() {
     if (!currentUser || !decodedUserName) return;
     try {
       const res = await fetch(
-        `http://localhost:4000/dm/${currentUser}/${decodedUserName}`,
+        `/api/dm/${currentUser}/${decodedUserName}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data: DMMessage[] = await res.json();
@@ -47,7 +47,7 @@ function DMPage() {
   const sendMessage = async () => {
     if (!newMessage || !currentUser || !decodedUserName) return;
     try {
-      await fetch(`http://localhost:4000/dm`, {
+      await fetch(`/api/dm`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

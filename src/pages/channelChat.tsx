@@ -31,7 +31,7 @@ function ChannelChat() {
     const fetchChannel = async () => {
       if (!decodedChannelId || !token) return;
       try {
-        const res = await fetch("http://localhost:4000/channels", {
+        const res = await fetch("/api/channels", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data: ChannelMeta[] = await res.json();
@@ -50,7 +50,7 @@ function ChannelChat() {
       if (!decodedChannelId || !token) return;
       try {
         const res = await fetch(
-          `http://localhost:4000/channels/${encodeURIComponent(decodedChannelId)}/messages`,
+          `/api/channels/${encodeURIComponent(decodedChannelId)}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data: ChannelMessage[] = await res.json();
@@ -72,7 +72,7 @@ function ChannelChat() {
 
     try {
       await fetch(
-        `http://localhost:4000/channels/${encodeURIComponent(decodedChannelId)}/messages`,
+        `/api/channels/${encodeURIComponent(decodedChannelId)}/messages`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },

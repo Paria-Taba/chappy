@@ -23,7 +23,7 @@ function Register() {
     const newUser = { username, password };
 
     try {
-      const res = await fetch("http://localhost:4000/users/register", {
+      const res = await fetch("/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),

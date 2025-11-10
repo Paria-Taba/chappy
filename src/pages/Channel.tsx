@@ -34,7 +34,7 @@ function ChannelPage() {
   useEffect(() => {
     const fetchChannels = async () => {
       try {
-        const res = await fetch("http://localhost:4000/channels", {
+        const res = await fetch("/api/channels", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -47,7 +47,7 @@ function ChannelPage() {
 
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:4000/users");
+        const res = await fetch("/api/users");
         const data = await res.json();
         setUsers(data);
       } catch (err) {
@@ -64,7 +64,7 @@ function ChannelPage() {
     if (!newChannelName) return setError("Channel name is required");
 
     try {
-      const res = await fetch("http://localhost:4000/channels", {
+      const res = await fetch("/api/channels", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,7 @@ function ChannelPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:4000/channels/${encodeURIComponent(channelId)}`,
+        `/api/channels/${encodeURIComponent(channelId)}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -117,7 +117,7 @@ function ChannelPage() {
     if (!token || !currentUser) return setError("Not authenticated");
 
     try {
-      const res = await fetch(`http://localhost:4000/users/${encodeURIComponent(currentUser)}`, {
+      const res = await fetch(`/api/users/${encodeURIComponent(currentUser)}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
