@@ -198,4 +198,36 @@ router.get("/public/:id/messages", async (req, res) => {
 });
 
 
+// POST a message to a public channel as guest
+router.post("/public/:id/messages", async (req, res) => {
+  const { id } = req.params;
+  const { content, senderId } = req.body;
+
+  if (!content || !senderId) {
+    return res.status(400).json({ error: "Content and senderId are required" });
+  }
+
+  try {
+    const timestamp = new Date().toISOString();
+    const sk = `MESSAGE#${timestamp}#${senderId}`;
+
+    const params = {
+      TableName: "chappy",
+      Item: {
+        pk: id,        // channelId
+        sk,            // MESSAGE#timestamp#senderId
+        senderId,
+        content,
+        timestamp,
+      },
+    };
+
+    await ddbDocClient.send(new PutCommand(params));
+    res.status(201).json({ message: "Message sent as guest" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not send public message" });
+  }
+});
+
 export default router;
