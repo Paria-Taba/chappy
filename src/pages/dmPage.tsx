@@ -107,7 +107,7 @@ function DMPage() {
 
       <div className="button-div">
         <button>
-          <NavLink to="/channel">Back</NavLink>
+          <NavLink to="/channel">Back to channel</NavLink>
         </button>
       </div>
     </div>
