@@ -84,7 +84,7 @@ function Register() {
           Already a member? Log in
         </NavLink>
         
-        <button className="guest">Continue as a guest</button>
+         <NavLink to={"/guest"} className="guest">Continue as a guest</NavLink>
       </div>
     </div>
   );

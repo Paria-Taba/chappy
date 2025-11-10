@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+1. Projektets namn : Chappy – en chat-app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+2. Kort beskrivning:
 
-Currently, two official plugins are available:
+- Projektet är en chatt-app med kanaler och direktmeddelanden.
+- Gästanvändare kan läsa och skriva i publika kanaler men inte skicka privata meddelanden.
+- Funktioner: skapa kanaler (endast inloggade användare), skicka meddelanden, läsa meddelanden realtid.
+- Teknologier: React, TypeScript, Express, AWS DynamoDB, Zod, CSS.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+3. Funktioner:
 
-## React Compiler
+Registrera och logga in som användare
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+Skapa, läsa och skicka meddelanden i kanaler
 
-## Expanding the ESLint configuration
+Skicka direktmeddelanden (DM) till specifika användare
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Skapa och ta bort kanaler 
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Ta bort eget konto
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Låsta kanaler för inloggade användare
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Responsiv och användarvänlig frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+4. Teknologier:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Backend: Node.js, Express, REST API, DynamoDB
+
+Frontend: React, React Router, Zustand, CSS 
+
+Autentisering: JWT, bcrypt
+
+
+5. ## .env:
+Skapa en `.env`-fil med följande variabler:
+PORT=4000
+AWS_REGION=HEMLIG
+AWS_ACCESS_KEY_ID=HEMLIG
+AWS_SECRET_ACCESS_KEY=HEMLIG
+JWT_SECRET=HEMLIG
