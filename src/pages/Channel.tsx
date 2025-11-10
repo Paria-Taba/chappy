@@ -26,6 +26,7 @@ function ChannelPage() {
   const [newChannelName, setNewChannelName] = useState("");
   const [isLocked, setIsLocked] = useState(false);
   const [channelToDelete, setChannelToDelete] = useState<string | null>(null);
+  const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false); // state for delete account confirmation
   const navigate = useNavigate();
   const currentUser = localStorage.getItem("userName") || "";
   const token = localStorage.getItem("token") || "";
@@ -110,6 +111,27 @@ function ChannelPage() {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     navigate("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!token || !currentUser) return setError("Not authenticated");
+
+    try {
+      const res = await fetch(`http://localhost:4000/users/${encodeURIComponent(currentUser)}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete account");
+
+      // Clear local storage and navigate to login page
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
+      navigate("/");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Failed to delete account");
+    }
   };
 
   return (
@@ -215,6 +237,22 @@ function ChannelPage() {
         </div>
 
         <div className="button-div">
+          {/* Delete Account */}
+          {confirmDeleteAccount ? (
+            <div className="confirm-delete-channel">
+              <p>Are you sure you want to delete your account?</p>
+              <button onClick={handleDeleteAccount}>Yes</button>
+              <button onClick={() => setConfirmDeleteAccount(false)}>Cancel</button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirmDeleteAccount(true)}
+        
+            >
+              Delete Account
+            </button>
+          )}
+
           <button onClick={handleLogout}>Log out</button>
         </div>
 

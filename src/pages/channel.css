@@ -72,6 +72,10 @@ a:hover{
 	justify-content: center;
 	align-items: center;
 }
+.button-div{
+	display: flex;
+	flex-direction: column;
+}
 .button-div button{
 	color: white;
 	border-radius: 10px;
@@ -79,6 +83,7 @@ padding: 20px;
 font-size: 25px;
 background-color: #289DB9;
 cursor: pointer;
+margin: 10px;
 
 }
 .button-div button:hover{
