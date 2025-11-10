@@ -112,7 +112,7 @@ function ChannelChat() {
 
         <div className="button-div">
           <button>
-            <NavLink to="/channel">Back to Channels</NavLink>
+            <NavLink to="/channel">Back to Channel</NavLink>
           </button>
         </div>
       </div>

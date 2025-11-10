@@ -11,6 +11,9 @@
   background-color: #f9f9f9;
   margin-bottom: 10px;
 }
+.channel-messages>*{
+	padding: 10px;
+}
 
 .message {
   padding: 5px 10px;
@@ -80,4 +83,10 @@ cursor: pointer;
 }
 .button-div button:hover{
 	background-color: #00323e
+}
+@media screen and (max-width:400px) {
+	.channel-input-container{
+		flex-direction: column;
+	}
+	
 }

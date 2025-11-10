@@ -46,6 +46,7 @@ padding: 10px;
 }
 
 .dm-input-container {
+	width: 80%;
   display: flex;
   gap: 10px;
 }
@@ -106,4 +107,12 @@ cursor: pointer;
 	width:30px;
 	height: 30px;
 	border-radius: 100%;
+}
+@media screen and (max-width:500px) {
+	.dm-input-container {
+	width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 }
