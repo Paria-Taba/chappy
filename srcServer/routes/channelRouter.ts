@@ -1,4 +1,3 @@
-// src/routes/channelRouter.ts
 import express from "express";
 import {
   DeleteCommand,
@@ -15,10 +14,10 @@ import { verifyToken } from "../auth/auth.js";
 const router = express.Router();
 router.use(express.json());
 
-/* ---------------------- INTERFACES ---------------------- */
+
 interface Channel {
-  pk: string; // CHANNEL#timestamp
-  sk: string; // METADATA
+  pk: string; 
+  sk: string; 
   name: string;
   isLocked: boolean;
   createdBy: string;
@@ -26,14 +25,14 @@ interface Channel {
 }
 
 interface ChannelMessage {
-  pk: string; // CHANNEL#timestamp
-  sk: string; // MESSAGE#timestamp#senderId
+  pk: string; 
+  sk: string; 
   senderId: string;
   content: string;
   timestamp: string;
 }
 
-/* ---------------------- CHANNEL ROUTES ---------------------- */
+
 
 // GET all channels
 router.get("/", verifyToken, async (req: Request, res: Response<Channel[] | { error: string }>) => {
@@ -64,7 +63,7 @@ router.post("/", verifyToken, async (req: Request<{}, {}, unknown>, res: Respons
 
     const { name, isLocked, createdBy } = parsed.data;
     const createdAt = new Date().toISOString();
-    const channelId = `CHANNEL#${Date.now()}`; // timestamp ID
+    const channelId = `CHANNEL#${Date.now()}`; 
 
     const params = {
       TableName: "chappy",
@@ -104,7 +103,6 @@ router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
-/* ---------------------- MESSAGE ROUTES ---------------------- */
 
 // GET all messages in a channel
 router.get("/:id/messages", verifyToken, async (req: Request, res: Response<ChannelMessage[] | { error: string }>) => {
@@ -115,7 +113,7 @@ router.get("/:id/messages", verifyToken, async (req: Request, res: Response<Chan
       TableName: "chappy",
       KeyConditionExpression: "pk = :pk AND begins_with(sk, :prefix)",
       ExpressionAttributeValues: { ":pk": id, ":prefix": "MESSAGE#" },
-      ScanIndexForward: true, // ascending order
+      ScanIndexForward: true, 
     };
 
     const data = await ddbDocClient.send(new QueryCommand(params));
@@ -141,7 +139,7 @@ router.post("/:id/messages", verifyToken, async (req, res) => {
 
     const params = {
       TableName: "chappy",
-      Item: { pk: id, sk, senderId, content, timestamp }, // pk = unique channelId
+      Item: { pk: id, sk, senderId, content, timestamp }, 
     };
 
     await ddbDocClient.send(new PutCommand(params));
@@ -161,7 +159,7 @@ router.get("/public", async (req, res) => {
       ExpressionAttributeValues: {
         ":prefix": "CHANNEL#",
         ":sk": "METADATA",
-        ":isLocked": false, // only unlocked/public channels
+        ":isLocked": false, 
       },
     };
 
@@ -214,8 +212,8 @@ router.post("/public/:id/messages", async (req, res) => {
     const params = {
       TableName: "chappy",
       Item: {
-        pk: id,        // channelId
-        sk,            // MESSAGE#timestamp#senderId
+        pk: id,      
+        sk,           
         senderId,
         content,
         timestamp,

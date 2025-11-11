@@ -15,7 +15,7 @@ interface DMMessage {
   timestamp: string;
 }
 
-// Skicka DM
+// Send direct message
 router.post("/", verifyToken, async (req, res) => {
   const { senderId, receiverId, content } = req.body;
   if (!senderId || !receiverId || !content) return res.status(400).json({ error: "Missing fields" });
@@ -37,7 +37,7 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
-// Hämta DM mellan två användare
+// Get direct messages between two users
 router.get("/:user1/:user2", verifyToken, async (req, res) => {
   const { user1, user2 } = req.params;
   
@@ -80,7 +80,7 @@ router.post("/:channelId/message", verifyToken, async (req, res) => {
   }
 });
 
-// Hämta meddelanden för kanal
+// Get messages
 router.get("/:channelId/messages", verifyToken, async (req, res) => {
   const { channelId } = req.params;
 

@@ -21,9 +21,8 @@ function GuestChannelChat() {
   const decodedChannelId = decodeURIComponent(channelId || "");
   const [messages, setMessages] = useState<ChannelMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [channelName, setChannelName] = useState(""); // start empty
+  const [channelName, setChannelName] = useState(""); 
 
-  // Fetch channel metadata to get the name
   useEffect(() => {
     const fetchChannelMeta = async () => {
       try {

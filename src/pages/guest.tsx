@@ -50,7 +50,7 @@ function GuestPage() {
   }, []);
 
   const handleUserClick = (userName: string) => {
-    // Show message instead of opening DM
+    
     setDmMessage(`You cannot open private messages with ${userName} as a guest.`);
   };
 
