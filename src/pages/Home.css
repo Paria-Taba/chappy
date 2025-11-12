@@ -84,6 +84,8 @@ h1{
   color: #872116;
   margin-top: 10px;
   text-align: center;
+  box-shadow: none;
+  
 }
 
 .success-message {
